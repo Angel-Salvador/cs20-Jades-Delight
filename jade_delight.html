@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Jade Delight</title>
+</head>
+
+<body>
+
+<style>
+	html{
+		/* background-color: rgb(97, 7, 7);
+		color: rgb(215, 205, 205); */
+	}
+	.userInfo input {
+  		width: 80%;
+	}
+/* This is code to align the input fields! */
+	.lname, .fname, .street, .city, .phone{
+    width:80px;
+    text-align: right;
+    padding: 14px 10px 0 0;
+    margin:0 0 7px 0;
+	}
+	.userInfo{
+		width:130px;
+		margin:0;
+		margin:0 0 7px 0;
+	}
+	​/* This is code to align the input fields! */
+
+</style>
+
+<script>
+	setInterval(pickupOrDelivery, 10);
+	setInterval(totalCost, 100);
+	setInterval(billCost, 100);
+
+	function pickupOrDelivery() {
+		var addressFields = document.querySelectorAll('.userInfo.address');
+		var pickupOption = document.querySelector('input[value=pickup]');
+		for (var i = 0; i < addressFields.length; i++) {
+				if (pickupOption.checked) {
+				addressFields[i].style.visibility = "hidden";
+				} else {
+				addressFields[i].style.visibility = "visible";
+				}
+			}
+	}
+
+
+	function totalCost(){
+		document.getElementsByName('cost')[0].value = (document.getElementsByName("quan0")[0].value * 5.50).toFixed(2);
+		document.getElementsByName('cost')[1].value = (document.getElementsByName("quan1")[0].value * 7.25).toFixed(2);
+		document.getElementsByName('cost')[2].value = (document.getElementsByName("quan2")[0].value * 6.80).toFixed(2);
+		document.getElementsByName('cost')[3].value = (document.getElementsByName("quan3")[0].value * 9.50).toFixed(2);
+		document.getElementsByName('cost')[4].value = (document.getElementsByName("quan4")[0].value * 3.25).toFixed(2);
+        }
+
+	function billCost(){
+		var item0 = document.getElementsByName('cost')[0].value = (document.getElementsByName("quan0")[0].value * 5.50);
+		var item1 = document.getElementsByName('cost')[1].value = (document.getElementsByName("quan1")[0].value * 7.25);
+		var item2 = document.getElementsByName('cost')[2].value = (document.getElementsByName("quan2")[0].value * 6.80);
+		var item3 = document.getElementsByName('cost')[3].value = (document.getElementsByName("quan3")[0].value * 9.50);
+		var item4 = document.getElementsByName('cost')[4].value = (document.getElementsByName("quan4")[0].value * 3.25);
+		
+		document.getElementById('subtotal').value = (item0 + item1 + item2 + item3 + item4).toFixed(2);
+		var taxValue = ((item0 + item1 + item2 + item3 + item4) * 0.0625).toFixed(2);
+		document.getElementById('tax').value = parseFloat(taxValue).toFixed(2);		
+		var subTotal = 	document.getElementById('subtotal').value = (item0 + item1 + item2 + item3 + item4);
+		var tax = document.getElementById('tax').value = ((item0 + item1 + item2 + item3 + item4) * .0625);
+
+		document.getElementById('total').value = (tax + subTotal).toFixed(2);
+	}
+
+
+	function verifySubmit() {
+		const firstName = document.querySelector("input[name='fname']").value.trim();
+		const lastName = document.querySelector("input[name='lname']").value.trim();
+		const street = document.querySelector("input[name='street']").value.trim();
+		const city = document.querySelector("input[name='city']").value.trim();
+		const phone = document.querySelector("input[name='phone']").value.trim();
+		var deliveryOption = document.querySelector('input[value=delivery]');
+		var totalField = document.getElementById('total').value.trim();
+
+		if (firstName === '') {
+			alert("Please enter your first name");
+			return false;
+		}
+		
+		if (lastName === '') {
+			alert("Please enter your last name");
+			return false;
+		}
+
+		if (street === '' && deliveryOption.checked) {
+			alert("Please enter your street");
+			return false;
+		}
+
+		if (city === '' && deliveryOption.checked) {
+			alert("Please enter your city");
+			return false;
+		}
+
+		if (!/^(\d{7}|\d{10})$/.test(phone)) {
+			alert("Please enter your phone number");
+			return false;
+		}
+
+		if(totalField === ''){
+			alert("Please order at least one item")
+		}
+		else{
+
+			alert("Thank you for your order!")
+		}
+		return true;
+		}
+
+	function getCurrentTimePlus45() {
+		const now = new Date();
+		const minutes = now.getMinutes() + 45;
+		const hours = now.getHours() + Math.floor(minutes / 60);
+		const adjustedMinutes = minutes % 60;
+		return { hour: hours, minute: adjustedMinutes };
+	}
+
+</script>
+
+<script>
+
+
+// Object, name and cost
+function MenuItem(name, cost)
+{
+	this.name = name;
+	this.cost=cost;
+}
+//Array initalizes 5 items, based on ^^^
+menuItems = new Array(
+	new MenuItem("Chicken Chop Suey", 5.5),
+	new MenuItem("Sweet and Sour Pork", 7.25),
+	new MenuItem("Shrimp Lo Mein", 6.80),
+	new MenuItem("Moo Shi Chicken", 9.50),
+	new MenuItem("Fried Rice", 3.25)
+);
+
+function makeSelect(name, minRange, maxRange)
+{
+	var t= "";
+	t = "<select name='" + name + "' size='1'>";
+	for (j=minRange; j<=maxRange; j++)
+	   t += "<option>" + j + "</option>";
+	t+= "</select>"; 
+	return t;
+}
+
+function td(content, className="")
+{
+	return "<td class = '" + className + "'>" + content + "</td>";
+}
+	
+</script>
+
+
+<h1>Jade Delight</h1>
+<form>
+
+<p class="userInfo"><label>First Name:</label> <input type="text"  name='fname' /></p>
+<p class="userInfo"><label>Last Name*:</label>  <input type="text"  name='lname' /></p>
+<p class="userInfo address"><label>Street*:</label> <input type="text" name='street' /></p>
+<p class="userInfo address"><label>City*:</label> <input type="text" name='city' /></p>
+<p class="userInfo"><label>Phone*:</label> <input type="text"  name='phone' /></p>
+
+
+
+<h2> Pickup or Delivery</h2>
+<p>     
+	<!-- Pickup or Delivery -->
+	<input type="radio"  name="p_or_d" value = "pickup" checked="checked"/>Pickup  
+	<input type="radio"  name='p_or_d' value = 'delivery'/> Delivery
+</p>
+
+
+
+
+
+
+
+
+<h2> Order </h2>
+
+<table border="0" cellpadding="3">
+  <tr>
+    <th>Select Item</th>
+    <th>Item Name</th>
+    <th>Cost Each</th>
+    <th>Total Cost</th>
+  </tr>
+<script>
+
+// Order !!!!!!!!
+
+// JS MAKES ARRAYS FOR EVERYTING!! use array to retreive stuff
+
+  var s = "";
+  for (i=0; i< menuItems.length; i++) //for each item in array, generate menu items
+  {
+	  s += "<tr>";
+	  s += td(makeSelect("quan" + i, 0, 10),"selectQuantity");
+	  s += td(menuItems[i].name, "itemName");
+	  s += td("$" +menuItems[i].cost.toFixed(2), "cost");
+	  s += td("$<input type='text' name='cost' />", "totalCost");
+	  s+= "</tr>";
+  }
+  document.writeln(s);
+</script>
+</table>
+
+
+
+
+
+
+<h2> Bill </h2>
+
+<p class="subtotal totalSection"><label>Subtotal</label>: 
+   $ <input type="text"  name='subtotal' id="subtotal" />
+</p>
+<p class="tax totalSection"><label>Mass tax 6.25%:</label>
+  $ <input type="text"  name='tax' id="tax" />
+</p>
+<p class="total totalSection"><label>Total:</label> $ <input type="text"  name='total' id="total" />
+</p>
+
+<input type = "button" value = "Submit Order" onclick="verifySubmit()"/>
+
+</form>
+
+
+
+
+
+
+</body>
+</html>
